@@ -8,6 +8,9 @@ SCRIPT=`basename ${BASH_SOURCE[0]}`
 NORM=`tput sgr0`
 BOLD=`tput bold`
 REV=`tput smso`
+BGRED="$(tput setab 1)"
+BGREEN="$(tput setab 2)"
+FGWHITE="$(tput setaf 7)"
 #Help function
 function HELP {
   echo -e \\n"Help documentation for ${BOLD}${SCRIPT}.${NORM}"
@@ -28,10 +31,10 @@ while (( "$#" )); do
   esac
 done
 
-echo "Select Your PHP Version to ${BOLD}STOP ${NORM}[5.6,7.0,7.1]"
+echo "Select Your PHP Version to ${BGRED}${FGWHITE}${BOLD} STOP ${NORM} [5.6,7.0,7.1]"
 read PHPSTOPSELECTION
 
-echo "Select Your PHP Version to ${BOLD}START ${NORM}[5.6,7.0,7.1]"
+echo "Select Your PHP Version to ${BGREEN}${FGWHITE}${BOLD} START ${NORM} [5.6,7.0,7.1]"
 read PHPSTARTSELECTION
 
 brew services stop php@$PHPSTOPSELECTION    
