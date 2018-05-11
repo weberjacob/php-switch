@@ -28,26 +28,22 @@ while (( "$#" )); do
   esac
 done
 
-echo "Select Your PHP Version [5.6,7.0,7.1]"
-read PHPSELECTION
+echo "Select Your PHP Version to STOP [5.6,7.0,7.1]"
+read PHPSTOPSELECTION
 
-if [[ $PHPSELECTION = "7.0" ]] 
+echo "Select Your PHP Version to START [5.6,7.0,7.1]"
+read PHPSTARTSELECTION
+
+brew services stop php@$PHPSTOPSELECTION    
+brew services start php@$PHPSTARTSELECTION
+brew link --overwrite php@$PHPSTARTSELECTION --force
+sed -i '92s/.*/export PATH=\"\/usr\/local\/opt\/php@\$PHPSTARTSELECTION\/bin:$PATH\" /' ~/.zshrc
+sed -i '93s/.*/export PATH=\"\/usr\/local\/opt\/php@\$PHPSTARTSELECTION\/sbin:$PATH\" /' ~/.zshrc
+
+if [[ $PHPSTARTSELECTION = "7.0" ]];
 then
-  brew services stop php@7.1
-  brew services start php@7.0
-  brew link --overwrite php@7.0 --force
   sed -i '93s/.*/        server unix:\/usr\/local\/var\/run\/php-fpm.sock;/' /usr/local/etc/nginx/nginx.conf
-  sed -i '92s/.*/export PATH=\"\/usr\/local\/opt\/php@7.0\/bin:$PATH\" /' ~/.zshrc
-  sed -i '93s/.*/export PATH=\"\/usr\/local\/opt\/php@7.0\/sbin:$PATH\" /' ~/.zshrc
-elif [[ $PHPSELECTION = "7.1" ]]
+  elif [[ $PHPSTARTSELECTION = "7.1" ]];
 then
-  brew services stop php@7.0
-  brew services start php@7.1
-  brew link --overwrite php@7.1 --force
   sed -i '93s/.*/        server 127.0.0.1:9000;/' /usr/local/etc/nginx/nginx.conf
-  sed -i '92s/.*/export PATH=\"\/usr\/local\/opt\/php@7.1\/bin:$PATH\" /' ~/.zshrc
-  sed -i '93s/.*/export PATH=\"\/usr\/local\/opt\/php@7.1\/sbin:$PATH\" /' ~/.zshrc
-elif [[ $PHPSELECTION = "5.6" ]]
-then
-  echo "Why are you using 5.6? Silly!"
 fi
