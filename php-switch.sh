@@ -28,22 +28,22 @@ while (( "$#" )); do
   esac
 done
 
-echo "Select Your PHP Version to STOP [5.6,7.0,7.1]"
+echo "Select Your PHP Version to ${BOLD}STOP ${NORM}[5.6,7.0,7.1]"
 read PHPSTOPSELECTION
 
-echo "Select Your PHP Version to START [5.6,7.0,7.1]"
+echo "Select Your PHP Version to ${BOLD}START ${NORM}[5.6,7.0,7.1]"
 read PHPSTARTSELECTION
 
-brew services stop php@$PHPSTOPSELECTION    
+brew services stop php@$PHPSTOPSELECTION    
 brew services start php@$PHPSTARTSELECTION
 brew link --overwrite php@$PHPSTARTSELECTION --force
-sed -i '92s/.*/export PATH=\"\/usr\/local\/opt\/php@\$PHPSTARTSELECTION\/bin:$PATH\" /' ~/.zshrc
-sed -i '93s/.*/export PATH=\"\/usr\/local\/opt\/php@\$PHPSTARTSELECTION\/sbin:$PATH\" /' ~/.zshrc
+sed -i '92s/.*/export PATH=\"\/usr\/local\/opt\/php@'$PHPSTARTSELECTION'\/bin:$PATH\" /' ~/.zshrc
+sed -i '93s/.*/export PATH=\"\/usr\/local\/opt\/php@'$PHPSTARTSELECTION'\/sbin:$PATH\" /' ~/.zshrc
 
 if [[ $PHPSTARTSELECTION = "7.0" ]];
 then
   sed -i '93s/.*/        server unix:\/usr\/local\/var\/run\/php-fpm.sock;/' /usr/local/etc/nginx/nginx.conf
-  elif [[ $PHPSTARTSELECTION = "7.1" ]];
+elif [[ $PHPSTARTSELECTION = "7.1" ]];
 then
   sed -i '93s/.*/        server 127.0.0.1:9000;/' /usr/local/etc/nginx/nginx.conf
 fi
