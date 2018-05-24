@@ -50,3 +50,5 @@ elif [[ $PHPSTARTSELECTION = "7.1" ]];
 then
   sed -i '93s/.*/        server 127.0.0.1:9000;/' /usr/local/etc/nginx/nginx.conf
 fi
+exec /bin/zsh
+. ~/.zshrc
